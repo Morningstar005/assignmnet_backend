@@ -24,23 +24,33 @@ const createStudent = asyncHandler(async (req, res) => {
     },
   });
 
-  return res.status(201).json(new ApiResponse(201, { student: newStudent }, "Student created successfully"));
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        { student: newStudent },
+        "Student created successfully"
+      )
+    );
 });
 // Get a single student by ID
 
 const getStudentById = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-  
-    const student = await prisma.student.findUnique({
-      where: { id: parseInt(id, 10) },
-    });
-  
-    if (!student) {
-      throw new ApiError(404, "Student not found");
-    }
-  
-    return res.status(200).json(new ApiResponse(200, student, "Student retrieved successfully"));
+  const { id } = req.params;
+
+  const student = await prisma.student.findUnique({
+    where: { id: parseInt(id, 10) },
   });
+
+  if (!student) {
+    throw new ApiError(404, "Student not found");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, student, "Student retrieved successfully"));
+});
 
 // Get all students
 const getAllStudents = asyncHandler(async (req, res) => {
@@ -52,7 +62,9 @@ const getAllStudents = asyncHandler(async (req, res) => {
     },
   });
 
-  return res.status(200).json(new ApiResponse(200, { students }, "Students fetched successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { students }, "Students fetched successfully"));
 });
 
 // Update a student by ID
@@ -88,8 +100,11 @@ const updateStudent = asyncHandler(async (req, res) => {
     });
 
     // Return a success response
-    return res.status(200).json(new ApiResponse(200, updatedStudent, "Student updated successfully"));
-
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(200, updatedStudent, "Student updated successfully")
+      );
   } catch (error) {
     console.error("Error updating student:", error.message);
 
@@ -101,7 +116,6 @@ const updateStudent = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Internal server error");
   }
 });
-
 
 // Delete a student by ID
 const deleteStudent = asyncHandler(async (req, res) => {
@@ -130,8 +144,9 @@ const deleteStudent = asyncHandler(async (req, res) => {
     });
 
     // Return a success response
-    return res.status(200).json(new ApiResponse(200, null, "Student deleted successfully"));
-
+    return res
+      .status(200)
+      .json(new ApiResponse(200, null, "Student deleted successfully"));
   } catch (error) {
     console.error("Error deleting student:", error.message);
 
@@ -143,7 +158,6 @@ const deleteStudent = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Internal server error");
   }
 });
-
 
 module.exports = {
   createStudent,
