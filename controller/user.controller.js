@@ -133,28 +133,39 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  const incomingRefreshToken = req.cookie.refreshToken || req.body.refreshToken;
+  // Access the refresh token from cookies or body
+  const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
+
   if (!incomingRefreshToken) {
     throw new ApiError(401, "RefreshToken not found");
   }
+
+  console.log('incomingRefreshToken', incomingRefreshToken);
+
   const decodedToken = jwt.verify(
     incomingRefreshToken,
     process.env.REFRESH_TOKEN_SECRET
   );
+
   console.log("decodedToken", decodedToken);
+
   const user = await prisma.user.findUnique({
     where: { id: decodedToken?.userId },
   });
+
   if (!user) {
     throw new ApiError(401, "User not found");
   }
+
   if (incomingRefreshToken !== user?.refreshToken) {
     throw new ApiError(401, "Refresh token is expired or used");
   }
+
   const options = {
     httpOnly: true,
     secure: true, // Ensure your app is running over HTTPS for secure cookies
   };
+
   const { accessToken, newrefreshToken } = await generateAccessAndRefreshTokens(
     user.id,
     user.name
