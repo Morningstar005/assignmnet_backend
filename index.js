@@ -14,7 +14,10 @@ const prisma = new PrismaClient();
 
 // Initialize Express app
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin:'*',
+  credentials:true
+}))
 app.use(express.json()); // Middleware to parse JSON requests
 app.use(express.urlencoded({ extended: true, limit: "24kb" })); // fetching data from params
 app.use(cookieParser());
