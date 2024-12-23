@@ -60,6 +60,15 @@ const getAllStudents = asyncHandler(async (req, res) => {
     where: {
       userId, // Only fetch students created by the logged-in user
     },
+    select: {
+      id: true, // Include the ID field
+      name: true, // Include other fields you need
+      cohort: true,
+      courses: true,
+      dateJoined: true,
+      lastLogin: true,
+      // status: true,
+    },
   });
 
   return res
